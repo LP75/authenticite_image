@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyse d'Image</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Analyse d'Image</h1>
+        <form id="analyze-form" enctype="multipart/form-data">
+            <label for="image-file" class="file-upload-label">Sélectionner une image</label>
+            <input type="file" id="image-file" name="image" accept="image/*" required>
+            <button type="submit">Analyser</button>
+        </form>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        document.getElementById('analyze-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData();
+            const fileInput = document.getElementById('image-file');
+            formData.append('image', fileInput.files[0]);
+
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<div class="loading">Traitement en cours...</div>';
+
+            try {
+                const response = await fetch('/analyze', {
+                    method: 'POST',
+                    body: formData
+                });
+                if (!response.ok) {
+                    throw new Error(`Erreur : ${response.statusText}`);
+                }
+
+                const result = await response.json();
+                if (result.error) {
+                    resultDiv.innerHTML = `<div class="error">${result.error}</div>`;
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="result-section">
+                            <h2>Résultat de la Localisation</h2>
+                            <div class="result-item">
+                                <strong>Latitude :</strong> ${result.localization.latitude}
+                            </div>
+                            <div class="result-item">
+                                <strong>Longitude :</strong> ${result.localization.longitude}
+                            </div>
+                        </div>
+                        <div class="result-section">
+                            <h2>Résultat de l'Authenticité</h2>
+                            <div class="result-item">
+                                <strong>Score d'Authenticité :</strong> ${result.authenticity.authenticity_score}%
+                            </div>
+                            <div class="result-item">
+                                <strong>Vérification EXIF :</strong> ${result.authenticity.exif_check}
+                            </div>
+                            <div class="result-item">
+                                <strong>Vérification de la Compression :</strong> ${result.authenticity.compression_check}
+                            </div>
+                            <div class="result-item">
+                                <strong>Vérification de l'Histogramme :</strong> ${result.authenticity.histogram_check}
+                            </div>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="error">Erreur : ${error.message}</div>`;
+            }
+        });
+    </script>
+</body>
+</html>
