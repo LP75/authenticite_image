@@ -9,9 +9,18 @@
 <body>
     <div class="container">
         <h1>Analyse d'Image</h1>
+        <p class="info-message">
+            Cet analyseur est particulièrement efficace pour les lieux uniques et connus (monuments, points d'intérêt, etc.).
+            Pour plus de détails sur les capacités et limites de l'outil, veuillez consulter le rapport dans la documentation.
+        </p>
         <form id="analyze-form" enctype="multipart/form-data">
             <label for="image-file" class="file-upload-label">Sélectionner une image</label>
             <input type="file" id="image-file" name="image" accept="image/*" required>
+            <div id="file-selected" class="file-selected hidden">
+                Image sélectionnée : <span id="file-name"></span>
+                <br>
+                Vous pouvez maintenant cliquer sur Analyser
+            </div>
             <button type="submit">Analyser</button>
         </form>
 
@@ -19,6 +28,20 @@
     </div>
 
     <script>
+        // Ajout de l'événement pour l'upload du fichier
+        document.getElementById('image-file').addEventListener('change', (e) => {
+            const fileName = e.target.files[0]?.name;
+            const fileSelectedDiv = document.getElementById('file-selected');
+            const fileNameSpan = document.getElementById('file-name');
+            
+            if (fileName) {
+                fileNameSpan.textContent = fileName;
+                fileSelectedDiv.classList.remove('hidden');
+            } else {
+                fileSelectedDiv.classList.add('hidden');
+            }
+        });
+
         document.getElementById('analyze-form').addEventListener('submit', async (e) => {
             e.preventDefault();
             const formData = new FormData();
@@ -49,6 +72,13 @@
                             </div>
                             <div class="result-item">
                                 <strong>Longitude :</strong> ${result.localization.longitude}
+                            </div>
+                            <div class="result-item maps-link">
+                                <a href="https://www.google.com/maps?q=${result.localization.latitude},${result.localization.longitude}" 
+                                   target="_blank" 
+                                   rel="noopener noreferrer">
+                                   Voir sur Google Maps
+                                </a>
                             </div>
                         </div>
                         <div class="result-section">
