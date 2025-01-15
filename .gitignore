@@ -1,10 +1,12 @@
 # Dependencies
 /node_modules
 /.pnp
-.pnp.js
 
 # Testing
 /img
+
+# Features File
+output_features_30K.pkl
 
 # Misc
 .DS_Store
