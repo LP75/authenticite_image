@@ -5,7 +5,8 @@
 # Testing
 /img
 
-# Features File
+# Data files
+*.pkl
 output_features_30K.pkl
 
 # Misc
