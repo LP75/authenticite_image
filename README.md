@@ -6,7 +6,7 @@ Guide d'installation et d'utilisation
 
 1. Clonez le dépôt :
 ```bash
-git clone [URL_DU_REPO]
+git clone https://github.com/LP75/authenticite_image
 ```
 
 2. Installez les dépendances Node.js :
