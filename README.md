@@ -9,9 +9,18 @@ Guide d'installation et d'utilisation
 git clone [URL_DU_REPO]
 ```
 
-2. Installez les dépendances :
+2. Installez les dépendances Node.js :
 ```bash
 npm install
+```
+
+3. Installez les dépendances Python :
+
+Le projet utilise Python 3.11.4
+
+Dépendances :
+```bash
+pip install -r requirements.txt
 ```
 
 ## Utilisation
